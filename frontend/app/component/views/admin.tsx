@@ -1,12 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import MDEditor from '@uiw/react-md-editor';
+import { useArticle } from '@/app/hook/useArticle';
 
 export const AdminPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [value, setValue] = useState("");
+  const [title, setTitle] = useState('')
+  const {article, readArticle, createArticle} = useArticle()
 
   const handleLogin = async () => {
     const encoded = btoa(`${username}:${password}`);
@@ -33,9 +38,10 @@ export const AdminPage = () => {
   // ページロード時に localStorage に保存された認証情報で自動ログイン
   useEffect(() => {
     const savedAuth = localStorage.getItem('auth');
+    
     if (savedAuth) {
-      fetch('http://localhost:5000/admin/', {
-        method: 'GET',
+      fetch('http://localhost:4000/admin/', {
+        method: 'POST',
         headers: {
           Authorization: 'Basic ' + savedAuth,
         },
@@ -47,6 +53,7 @@ export const AdminPage = () => {
           });
         }
       });
+      readArticle()
     }
   }, []);
 
@@ -54,7 +61,9 @@ export const AdminPage = () => {
     return (
       <div style={{ padding: 24 }}>
         <h2>管理画面</h2>
-        <p>{message}</p>
+        <button onClick={() => createArticle({ title, body: value, imagePath: '' })}>公開設定へ</button>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />
+        <MDEditor height={200} value={value} onChange={setValue} />
         <button
           onClick={() => {
             localStorage.removeItem('auth');
@@ -66,6 +75,8 @@ export const AdminPage = () => {
         >
           ログアウト
         </button>
+
+        {article?.map((data) => data.title)}
       </div>
     );
   }
