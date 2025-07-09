@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 import pymysql
 import os
-
 bp = Blueprint("articles", __name__)
 
 articles = [
@@ -30,6 +29,7 @@ articles = [
         "updated_at": "2023-10-01T12:00:00Z"
     },
 ]
+
 @bp.route("/", methods=["GET"])
 def get(): 
     try:
@@ -45,6 +45,7 @@ def get_by_id(id):
             return jsonify({"error": "Article not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 # def get_article(id):
 #     try:
 #         connection = pymysql.connect(

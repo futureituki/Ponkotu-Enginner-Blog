@@ -27,6 +27,7 @@ services:
     restart: always
     volumes: 
       - ./backend:/app
+      - ./backend/uploads:/app/uploads
   
   frontend:
     build: ./frontend

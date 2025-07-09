@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import MDEditor from '@uiw/react-md-editor';
+import { useState, useEffect, useRef } from 'react';
+import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
 import { useArticle } from '@/app/hook/useArticle';
 
 export const AdminPage = () => {
@@ -12,6 +12,7 @@ export const AdminPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState('')
   const {article, readArticle, createArticle} = useArticle()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleLogin = async () => {
     const encoded = btoa(`${username}:${password}`);
@@ -35,6 +36,17 @@ export const AdminPage = () => {
     }
   };
 
+    // カスタム画像挿入コマンド
+  const imageUploadCommand: ICommand = {
+      name: 'imageUpload',
+      keyCommand: 'imageUpload',
+      buttonProps: { 'aria-label': 'Insert Image' },
+      icon: <span>🖼️</span>,
+      execute: () => {
+        fileInputRef.current?.click()
+      }
+    }
+
   // ページロード時に localStorage に保存された認証情報で自動ログイン
   useEffect(() => {
     const savedAuth = localStorage.getItem('auth');
@@ -57,13 +69,51 @@ export const AdminPage = () => {
     }
   }, []);
 
+  const handleUpload = async (e:React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    console.log(file)
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('http://localhost:4000/upload_file', {
+        method:'POST',
+        body:formData
+    })
+      const imageUrl = await res.json()
+      console.log(imageUrl, imageUrl.url)
+      setValue((prev) => `${prev}\n\n![image](${imageUrl.url})`)
+    } catch (error) {
+      console.error('Upload failed:', error)
+    }
+  }
+
   if (isAuthenticated) {
     return (
       <div style={{ padding: 24 }}>
         <h2>管理画面</h2>
         <button onClick={() => createArticle({ title, body: value, imagePath: '' })}>公開設定へ</button>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />
-        <MDEditor height={200} value={value} onChange={setValue} />
+        <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleUpload}
+        accept="image/*"
+        hidden
+      />
+        <MDEditor height={200} value={value} preview="live" onChange={setValue} commands={[
+          commands.bold,
+          commands.italic,
+          commands.hr,
+          commands.title,
+          commands.link,
+          commands.code,
+          imageUploadCommand, // ← 追加
+          commands.preview,
+        ]} />
         <button
           onClick={() => {
             localStorage.removeItem('auth');
