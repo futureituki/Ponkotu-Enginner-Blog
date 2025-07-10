@@ -11,6 +11,7 @@ export const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState('')
+  const [thumbnail, setThumnail] = useState("")
   const {article, readArticle, createArticle} = useArticle()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -69,11 +70,9 @@ export const AdminPage = () => {
     }
   }, []);
 
-  const handleUpload = async (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleThumnailUpload = async(e:React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-
-    console.log(file)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -83,9 +82,28 @@ export const AdminPage = () => {
         method:'POST',
         body:formData
     })
-      const imageUrl = await res.json()
-      console.log(imageUrl, imageUrl.url)
-      setValue((prev) => `${prev}\n\n![image](${imageUrl.url})`)
+      const json = await res.json()
+      setThumnail(json.url)
+    } catch (error) {
+      console.error('Upload failed:', error)
+    }
+  }
+
+  const handleUpload = async (e:React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('http://localhost:4000/upload_file', {
+        method:'POST',
+        body:formData
+    })
+      const uploadImage = await res.json()
+      // 記事内に画像を保存
+      // setValue((prev) => `${prev}\n\n![image](${imageUrl.url})`)
     } catch (error) {
       console.error('Upload failed:', error)
     }
@@ -95,8 +113,18 @@ export const AdminPage = () => {
     return (
       <div style={{ padding: 24 }}>
         <h2>管理画面</h2>
-        <button onClick={() => createArticle({ title, body: value, imagePath: '' })}>公開設定へ</button>
+        <button onClick={() => createArticle({ title, body: value, imagePath: thumbnail })}>公開設定へ</button>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />
+        <div>
+          <label htmlFor="thumnail">サムネイルをアップロード</label>
+          <input
+          name='thumnail'
+          type="file"
+          onChange={handleThumnailUpload}
+          accept="image/*"
+        />
+        </div>
+        <img src={thumbnail} />
         <input
         type="file"
         ref={fileInputRef}
