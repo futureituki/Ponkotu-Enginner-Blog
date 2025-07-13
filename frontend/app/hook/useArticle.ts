@@ -19,14 +19,21 @@ export const useArticle = () => {
 
     const createArticle = async(data:Omit<Article, "updatedAt" | "createdAt" | "id">) => {
         try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
             const formData = new FormData();
             formData.append('title', data.title);
             formData.append('body', data.body);
-            formData.append('auth', localStorage.getItem('auth') || '');
             formData.append('thumnailPath', data.thumnailPath);
             
             const res = await fetch(`http://localhost:4000/admin/create`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
                 body: formData
             });
             

@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
 import { useArticle } from '@/app/hook/useArticle';
-import { ArticleList } from '@/app/component/templates/ArticleList';
 
 export const AdminPage = () => {
   const [username, setUsername] = useState('');
@@ -17,47 +16,57 @@ export const AdminPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleLogin = async () => {
-    const encoded = btoa(`${username}:${password}`);
+    try {
+      const res = await fetch('http://localhost:4000/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      });
 
-    const res = await fetch('http://localhost:4000/admin/', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Basic ' + encoded,
-      },
-    });
-
-    if (res.ok) {
       const data = await res.json();
-      setMessage(data.message);
-      setIsAuthenticated(true);
-      // localStorage に保存（簡易認証状態）
-      localStorage.setItem('auth', encoded);
-    } else {
-      setMessage('認証に失敗しました。');
+      
+      if (res.ok) {
+        setMessage(data.message);
+        setIsAuthenticated(true);
+        // JWTトークンをlocalStorageに保存
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+      } else {
+        setMessage(data.message || '認証に失敗しました。');
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      setMessage('ログインエラーが発生しました。');
       setIsAuthenticated(false);
     }
   };
 
-    // カスタム画像挿入コマンド
-  const imageUploadCommand: ICommand = {
-      name: 'imageUpload',
-      keyCommand: 'imageUpload',
-      buttonProps: { 'aria-label': 'Insert Image' },
-      icon: <span>🖼️</span>,
-      execute: () => {
-        fileInputRef.current?.click()
-      }
+  // カスタム画像挿入コマンド
+  const imageUploadCommand: any = {
+    name: 'imageUpload',
+    keyCommand: 'imageUpload',
+    buttonProps: { 'aria-label': 'Insert Image' },
+    icon: <span>🖼️</span>,
+    execute: () => {
+      fileInputRef.current?.click()
     }
+  }
 
-  // ページロード時に localStorage に保存された認証情報で自動ログイン
+  // ページロード時にトークンの検証
   useEffect(() => {
-    const savedAuth = localStorage.getItem('auth');
+    const token = localStorage.getItem('token');
     
-    if (savedAuth) {
-      fetch('http://localhost:4000/admin/', {
+    if (token) {
+      fetch('http://localhost:4000/admin/verify', {
         method: 'POST',
         headers: {
-          Authorization: 'Basic ' + savedAuth,
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       }).then((res) => {
         if (res.ok) {
@@ -65,6 +74,10 @@ export const AdminPage = () => {
             setMessage(data.message);
             setIsAuthenticated(true);
           });
+        } else {
+          // トークンが無効な場合は削除
+          localStorage.removeItem('token');
+          localStorage.removeItem('username');
         }
       });
       readArticle()
@@ -141,11 +154,11 @@ export const AdminPage = () => {
           commands.link,
           commands.code,
           imageUploadCommand, // ← 追加
-          // commands.preview,
         ]} />
         <button
           onClick={() => {
-            localStorage.removeItem('auth');
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
             setIsAuthenticated(false);
             setUsername('');
             setPassword('');
@@ -154,7 +167,8 @@ export const AdminPage = () => {
         >
           ログアウト
         </button>
-        <ArticleList articles={articles} />
+
+        {articles?.map((data) => data.title)}
       </div>
     );
   }

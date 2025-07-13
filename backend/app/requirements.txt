@@ -1,5 +1,6 @@
 flask
-pymysql
 flask-cors
-Flask-HTTPAuth
+flask-httpauth
+pymysql
+PyJWT
 cryptography
