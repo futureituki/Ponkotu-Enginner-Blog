@@ -1,41 +1,45 @@
 'use client';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Article } from "@/app/type/article"
 
 export const useArticle = () => {
-    const [article, setArticle] = useState<Article[]>([])
+    const [articles, setArticles] = useState<Article[]>([])
     const [error, setError] = useState<null | string>(null)
 
-    const readArticle = () => {
-        // ${process.env.BASE_URL}
-        fetch(`http://localhost:4000/admin/read`).then((res: Response) => {
-            console.log(res)
-            if (res.ok) {
-                return res.json();
-            }
-        }).then((data: Article[]) => {
-            setArticle(data);
-        }).catch((e) => {
-            setError(e)
-        })
+    const readArticle = async () => {
+        try {
+            const res = await fetch(`http://localhost:4000/admin/read`);
+            if (!res.ok) throw new Error('Failed to fetch articles');
+            const data = await res.json();
+            setArticles(data);
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'Unknown error');
+        }
     }
 
     const createArticle = async(data:Omit<Article, "updatedAt" | "createdAt" | "id">) => {
-        const formData = new FormData();
-        formData.append('title', data.title);
-        formData.append('body', data.body);
-        formData.append('auth', localStorage.getItem('auth') || '');
-        formData.append('imagePath', data.imagePath); // バックエンドで必要なので空文字を追加
-        await fetch(`http://localhost:4000/admin/create`, {
-            method: 'POST',
-            body: formData
-        }).then((res: Response) => {
-            if (res.ok) {
-                return res.json();
-            }
-        }).catch((e) => {
-            setError(e)
-        })
+        try {
+            const formData = new FormData();
+            formData.append('title', data.title);
+            formData.append('body', data.body);
+            formData.append('auth', localStorage.getItem('auth') || '');
+            formData.append('thumnailPath', data.thumnailPath);
+            
+            const res = await fetch(`http://localhost:4000/admin/create`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!res.ok) throw new Error('Failed to create article');
+            await readArticle(); // 記事作成後に一覧を更新
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'Unknown error');
+        }
     }
-    return { article, readArticle, createArticle }
+
+    useEffect(() => {
+        readArticle();
+    }, []);
+
+    return { articles, error, readArticle, createArticle }
 }

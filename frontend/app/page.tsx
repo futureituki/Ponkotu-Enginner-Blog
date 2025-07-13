@@ -1,21 +1,8 @@
-'use client'
-import { useEffect, useState } from "react";
-import Header from "@/app/component/parts/header";
+import { ArticleList } from "@/app/component/templates/ArticleList";
+import { TopPage } from "./component/views/top";
 
 export default function Home() {
-  const [status, setStatus] = useState("");
-
-  useEffect(() => {
-    fetch("http://localhost:4000/admin")
-      .then((res) => res.json())
-      .then((data) => setStatus(JSON.stringify(data)))
-      .catch((err) => setStatus(`API error ${err}`));
-  }, []);
-
   return (
-    <main>
-      <h1>Fullstack</h1>
-      <p>Flask API: {status}</p>
-    </main>
-  );
+    <TopPage />
+  )
 }

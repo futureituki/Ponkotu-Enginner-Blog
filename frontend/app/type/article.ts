@@ -1,8 +1,8 @@
 export type Article = {
-    id:string;
+    id:number;
     title:string;
     body: string;
-    imagePath:string;
+    thumnailPath:string
     createdAt: string;
     updatedAt: string
 }

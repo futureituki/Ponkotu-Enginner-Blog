@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
 import { useArticle } from '@/app/hook/useArticle';
+import { ArticleList } from '@/app/component/templates/ArticleList';
 
 export const AdminPage = () => {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ export const AdminPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState('')
   const [thumbnail, setThumnail] = useState("")
-  const {article, readArticle, createArticle} = useArticle()
+  const {articles, readArticle, createArticle} = useArticle()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleLogin = async () => {
@@ -113,7 +114,7 @@ export const AdminPage = () => {
     return (
       <div style={{ padding: 24 }}>
         <h2>管理画面</h2>
-        <button onClick={() => createArticle({ title, body: value, imagePath: thumbnail })}>公開設定へ</button>
+        <button onClick={() => createArticle({ title, body: value, thumnailPath: thumbnail })}>公開設定へ</button>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />
         <div>
           <label htmlFor="thumnail">サムネイルをアップロード</label>
@@ -132,7 +133,7 @@ export const AdminPage = () => {
         accept="image/*"
         hidden
       />
-        <MDEditor height={200} value={value} preview="live" onChange={setValue} commands={[
+        <MDEditor height={200} value={value} preview="live" onChange={(v) => setValue(v || "")} commands={[
           commands.bold,
           commands.italic,
           commands.hr,
@@ -140,7 +141,7 @@ export const AdminPage = () => {
           commands.link,
           commands.code,
           imageUploadCommand, // ← 追加
-          commands.preview,
+          // commands.preview,
         ]} />
         <button
           onClick={() => {
@@ -153,8 +154,7 @@ export const AdminPage = () => {
         >
           ログアウト
         </button>
-
-        {article?.map((data) => data.title)}
+        <ArticleList articles={articles} />
       </div>
     );
   }

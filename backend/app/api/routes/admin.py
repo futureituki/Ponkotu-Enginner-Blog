@@ -28,7 +28,7 @@ def create_articles():
         auth = request.form['auth']
         title = request.form['title']
         body = request.form['body']
-        imagePath = request.form['imagePath']
+        thumnailPath = request.form['thumnailPath']
         connection = pymysql.connect(
             host=os.environ["DB_HOST"],
             user=os.environ["DB_USER"],
@@ -37,8 +37,8 @@ def create_articles():
             port=3306
         )
         with connection.cursor() as cursor:
-             sql = "INSERT INTO articles (title, body, imagePath) VALUES (%s, %s, %s)"
-             cursor.execute(sql, (title, body, imagePath))
+             sql = "INSERT INTO articles (title, body, thumnailPath) VALUES (%s, %s, %s)"
+             cursor.execute(sql, (title, body, thumnailPath))
              #オートコミットじゃないので、明示的にコミットを書く必要がある
              connection.commit()
         return jsonify({"status": "ok"})
