@@ -1,0 +1,29 @@
+.articleContainer {
+    max-width: 1200px;
+    width: 70%;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .articleContainer {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .cardGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .cardGrid {
+        grid-template-columns: 1fr;
+    }
+}

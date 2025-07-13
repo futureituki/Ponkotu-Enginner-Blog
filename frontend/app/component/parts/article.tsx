@@ -2,10 +2,8 @@ import Image from "next/image"
 import styles from "@/app/component/parts/article.module.css";
 import { Article as ArticleType } from "@/app/type/article";
 
-export const Article = ({id, thumnailPath, body, title, createdAt }: ArticleType) => {
+export const Article = ({id, thumnailPath, title, createdAt }: ArticleType) => {
     return (
-        <div className={styles.articleContainer}>
-            <div className={styles.cardGrid}>
                 <a href={`/${id}`} className={styles.card}>
                     <div className={styles.thumbnailWrapper}>
                         <Image 
@@ -18,12 +16,9 @@ export const Article = ({id, thumnailPath, body, title, createdAt }: ArticleType
                         />
                     </div>
                     <div className={styles.cardContent}>
-                        <div className={styles.cardDate}>{new Date(createdAt).toLocaleDateString()}</div>
                         <h2 className={styles.cardTitle}>{title}</h2>
-                        <p className={styles.cardSummary}>{body}</p>
+                        <div className={styles.cardDate}>{new Date(createdAt).toLocaleDateString()}</div>
                     </div>
                 </a>
-            </div>
-        </div>
     )
 }
