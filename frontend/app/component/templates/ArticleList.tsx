@@ -9,7 +9,7 @@ export const ArticleList = ({articles}: {articles: ArticleType[]}) => {
             <div className={styles.mainContent}>
                 <div className={styles.cardGrid}>
                     {articles?.map((article) => (
-                        <ArticleComponent key={article.id} {...article} />
+                        <ArticleComponent key={article.uid} {...article} />
                     ))}
                 </div>
             </div>

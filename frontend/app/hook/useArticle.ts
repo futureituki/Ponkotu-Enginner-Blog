@@ -17,7 +17,7 @@ export const useArticle = () => {
         }
     }
 
-    const createArticle = async(data:Omit<Article, "updatedAt" | "createdAt" | "id">) => {
+    const createArticle = async(data:Omit<Article, "updatedAt" | "createdAt" | "uid">) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -44,9 +44,21 @@ export const useArticle = () => {
         }
     }
 
+    const selectArticle = async(uid:string) => {
+        console.log(uid)    
+        try {
+            const res = await fetch(`http://localhost:4000/admin/article/${uid}`);
+            if (!res.ok) throw new Error('Failed to select article');
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'Unknown error');
+        }
+    }
+
     useEffect(() => {
         readArticle();
     }, []);
 
-    return { articles, error, readArticle, createArticle }
+    return { articles, error, readArticle, createArticle, selectArticle }
 }

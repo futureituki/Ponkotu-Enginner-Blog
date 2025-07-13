@@ -36,13 +36,21 @@ def get():
         return jsonify(articles)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-@bp.route("/<int:id>", methods=["GET"])
-def get_by_id(id):
+@bp.route("/<int:uid>", methods=["GET"])
+def get_by_id(uid):
     try:
-        if id == article["id"]:
-            return jsonify(article)
-        else:
-            return jsonify({"error": "Article not found"}), 404
+        connection = pymysql.connect(
+            host=os.environ["DB_HOST"],
+            user=os.environ["DB_USER"],
+            password=os.environ["DB_PASS"],
+            database=os.environ["DB_NAME"],
+            port=3306   
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM articles WHERE uid = %s", (uid,))
+            article = cursor.fetchone()
+        connection.close()
+        return jsonify(article)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     

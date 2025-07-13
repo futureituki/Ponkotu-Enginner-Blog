@@ -9,10 +9,12 @@ from functools import wraps
 bp = Blueprint("admin", __name__)
 
 # JWT設定
-SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'password')
+SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'pass')
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'user')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'password')
 
 users = {
-    "admin": generate_password_hash("secret")
+    ADMIN_USERNAME: generate_password_hash(ADMIN_PASSWORD)
 }
 
 def token_required(f):
@@ -76,6 +78,9 @@ def verify_token(current_user):
 @token_required
 def create_articles(current_user):
     try:
+        import uuid
+        
+        uid = str(uuid.uuid4())
         title = request.form['title']
         body = request.form['body']
         thumnailPath = request.form['thumnailPath']
@@ -88,10 +93,10 @@ def create_articles(current_user):
             port=3306
         )
         with connection.cursor() as cursor:
-             sql = "INSERT INTO articles (title, body, thumnailPath) VALUES (%s, %s, %s)"
-             cursor.execute(sql, (title, body, thumnailPath))
+             sql = "INSERT INTO articles (uid, title, body, thumnailPath) VALUES (%s, %s, %s, %s)"
+             cursor.execute(sql, (uid, title, body, thumnailPath))
              connection.commit()
-        return jsonify({"status": "ok"})
+        return jsonify({"status": "ok", "uid": uid})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
@@ -111,5 +116,28 @@ def read_articles():
             cursor.execute(sql)
             result = cursor.fetchall()
         return jsonify(result)
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
+@bp.route('/article/<uid>', methods=["GET"])
+def get_article(uid):
+    try:
+        connection = pymysql.connect(
+            host=os.environ["DB_HOST"],
+            user=os.environ["DB_USER"],
+            password=os.environ["DB_PASS"],
+            database=os.environ["DB_NAME"],
+            port=3306,
+            cursorclass=pymysql.cursors.DictCursor
+        )
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM articles WHERE uid = %s"
+            cursor.execute(sql, (uid,))
+            result = cursor.fetchone()
+        
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify({"status": "error", "message": "Article not found"}), 404
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})

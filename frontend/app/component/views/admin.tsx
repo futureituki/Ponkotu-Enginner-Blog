@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
+import Image from 'next/image';
+import MDEditor, { commands } from '@uiw/react-md-editor'
 import { useArticle } from '@/app/hook/useArticle';
+import { ArticleList } from '@/app/component/templates/ArticleList';
 
 export const AdminPage = () => {
   const [username, setUsername] = useState('');
@@ -12,7 +14,7 @@ export const AdminPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState('')
   const [thumbnail, setThumnail] = useState("")
-  const {articles, readArticle, createArticle} = useArticle()
+  const {articles, readArticle, createArticle, selectArticle} = useArticle()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleLogin = async () => {
@@ -138,7 +140,13 @@ export const AdminPage = () => {
           accept="image/*"
         />
         </div>
-        <img src={thumbnail} />
+        <Image
+                            src={thumbnail || '/placeholder.jpg'} 
+                            alt={title}
+                            width={320}
+                            height={180}
+                            unoptimized
+                        />
         <input
         type="file"
         ref={fileInputRef}
@@ -168,7 +176,9 @@ export const AdminPage = () => {
           ログアウト
         </button>
 
-        {articles?.map((data) => data.title)}
+        {articles?.map((data) => (
+          <div key={data.uid}>{data.title}</div>
+        ))}
       </div>
     );
   }
