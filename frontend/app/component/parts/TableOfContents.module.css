@@ -1,0 +1,264 @@
+.toc {
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  position: sticky;
+  top: 2rem;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggleButton:hover {
+  background: #e9ecef;
+}
+
+.icon {
+  font-size: 0.75rem;
+  color: #6c757d;
+  transition: transform 0.2s;
+}
+
+.iconRotated {
+  transform: rotate(-90deg);
+}
+
+.content {
+  max-height: 400px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.collapsed {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  margin: 0;
+}
+
+.link {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  text-align: left;
+  border: none;
+  background: none;
+  color: #495057;
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.link:hover {
+  background: #f1f3f4;
+  color: #2c3e50;
+}
+
+.link.active {
+  background: #e3f2fd;
+  color: #1976d2;
+  border-left-color: #1976d2;
+  font-weight: 500;
+}
+
+/* 見出しレベル別のインデント */
+.level1 .link {
+  padding-left: 1.25rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.level2 .link {
+  padding-left: 2rem;
+  font-weight: 500;
+}
+
+.level3 .link {
+  padding-left: 2.75rem;
+}
+
+.level4 .link {
+  padding-left: 3.5rem;
+  font-size: 0.85rem;
+}
+
+.level5 .link {
+  padding-left: 4.25rem;
+  font-size: 0.85rem;
+}
+
+.level6 .link {
+  padding-left: 5rem;
+  font-size: 0.8rem;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .toc {
+    position: relative;
+    top: 0;
+    margin-bottom: 1.5rem;
+    max-height: none;
+  }
+
+  .content {
+    max-height: 300px;
+  }
+
+  .header {
+    padding: 0.875rem 1rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .link {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .level1 .link {
+    padding-left: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .level2 .link {
+    padding-left: 1.5rem;
+  }
+
+  .level3 .link {
+    padding-left: 2rem;
+  }
+
+  .level4 .link {
+    padding-left: 2.5rem;
+    font-size: 0.8rem;
+  }
+
+  .level5 .link {
+    padding-left: 3rem;
+    font-size: 0.8rem;
+  }
+
+  .level6 .link {
+    padding-left: 3.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ダークモード対応 */
+@media (prefers-color-scheme: dark) {
+  .toc {
+    background: #1e1e1e;
+    border-color: #333;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+  }
+
+  .header {
+    background: #2d2d2d;
+    border-bottom-color: #333;
+  }
+
+  .title {
+    color: #f0f0f0;
+  }
+
+  .toggleButton:hover {
+    background: #3a3a3a;
+  }
+
+  .icon {
+    color: #aaa;
+  }
+
+  .link {
+    color: #ccc;
+  }
+
+  .link:hover {
+    background: #333;
+    color: #f0f0f0;
+  }
+
+  .link.active {
+    background: #1e3a8a;
+    color: #60a5fa;
+    border-left-color: #60a5fa;
+  }
+}
+
+/* スクロールバーのスタイリング */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (prefers-color-scheme: dark) {
+  .content::-webkit-scrollbar-track {
+    background: #2d2d2d;
+  }
+
+  .content::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+
+  .content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+} 

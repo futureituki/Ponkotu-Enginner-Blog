@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import MDEditor, { commands } from '@uiw/react-md-editor'
 import { useArticle } from '@/app/hook/useArticle';
-import { ArticleList } from '@/app/component/templates/ArticleList';
 
 export const AdminPage = () => {
   const [username, setUsername] = useState('');
@@ -14,7 +13,7 @@ export const AdminPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState('')
   const [thumbnail, setThumnail] = useState("")
-  const {articles, readArticle, createArticle, selectArticle} = useArticle()
+  const {articles, readArticle, createArticle, selectArticle, refreshArticles} = useArticle()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleLogin = async () => {
@@ -128,6 +127,7 @@ export const AdminPage = () => {
   if (isAuthenticated) {
     return (
       <div style={{ padding: 24 }}>
+        <button onClick={refreshArticles}>最新データを取得</button>
         <h2>管理画面</h2>
         <button onClick={() => createArticle({ title, body: value, thumnailPath: thumbnail })}>公開設定へ</button>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />

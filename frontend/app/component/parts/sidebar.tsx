@@ -7,7 +7,7 @@ export const Sidebar = () => {
             <div className={styles.profileCard}>
                 <div className={styles.profileImageWrapper}>
                     <Image
-                        src="/profile.jpg"
+                        src="/profile.png"
                         alt="Profile"
                         width={120}
                         height={120}
