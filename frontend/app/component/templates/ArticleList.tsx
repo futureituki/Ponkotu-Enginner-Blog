@@ -1,6 +1,5 @@
 import { ArticleComponent } from "@/app/component/parts/article";
-import { Article } from "@/app/type/article";
-import { Sidebar } from "@/app/component/parts/sidebar";
+import { Article } from "@/app/type/index";
 import styles from "@/app/component/templates/article_list.module.css";
 
 export const ArticleList = ({articles}: {articles: Article[]}) => {

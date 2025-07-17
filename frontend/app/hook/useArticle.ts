@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Article } from "@/app/type/article"
+import { Article } from "@/app/type/index"
 
 export const useArticle = () => {
     const [articles, setArticles] = useState<Article[]>([]);
