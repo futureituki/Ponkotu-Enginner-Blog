@@ -124,12 +124,30 @@ export const AdminPage = () => {
     }
   }
 
+  const handleSubmit = async () => {
+    try {
+      await createArticle({ 
+        title, 
+        body: value, 
+        thumnailPath: thumbnail 
+      });
+      
+      // フォームをリセット
+      setTitle('');
+      setValue('');
+      setThumnail('');
+      setMessage('記事が正常に作成されました');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : '記事の作成に失敗しました');
+    }
+  };
+
   if (isAuthenticated) {
     return (
       <div style={{ padding: 24 }}>
         <button onClick={refreshArticles}>最新データを取得</button>
         <h2>管理画面</h2>
-        <button onClick={() => createArticle({ title, body: value, thumnailPath: thumbnail })}>公開設定へ</button>
+        <button onClick={handleSubmit}>記事を作成</button>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />
         <div>
           <label htmlFor="thumnail">サムネイルをアップロード</label>
@@ -176,8 +194,20 @@ export const AdminPage = () => {
           ログアウト
         </button>
 
-        {articles?.map((data) => (
-          <div key={data.uid}>{data.title}</div>
+        {articles?.map((article) => (
+          <div key={article.uid} style={{ 
+            padding: '1rem', 
+            border: '1px solid #ddd', 
+            marginBottom: '0.5rem',
+            borderRadius: '8px'
+          }}>
+            <h3>{article.title}</h3>
+            <p>作成日: {article.getFormattedCreatedAt()}</p>
+            <p>読了時間: 約{article.getEstimatedReadingTime()}分</p>
+            {article.isUpdated() && (
+              <p>更新日: {article.getFormattedUpdatedAt()}</p>
+            )}
+          </div>
         ))}
       </div>
     );

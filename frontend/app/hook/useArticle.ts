@@ -10,12 +10,15 @@ export const useArticle = () => {
         try {
             // force-cache: 記事一覧はキャッシュを優先（パフォーマンス重視）
             const res = await fetch(`http://localhost:4000/admin/read`, {
-                cache: 'force-cache'
+                cache: 'no-store'
             });
             if (!res.ok) throw new Error('Failed to fetch articles');
             const data = await res.json();
-            setArticles(data);
-            return data;
+            
+            // APIレスポンスをArticleクラスインスタンスに変換
+            const articleInstances = Article.fromApiResponseArray(data);
+            setArticles(articleInstances);
+            return articleInstances;
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
@@ -33,8 +36,11 @@ export const useArticle = () => {
             });
             if (!res.ok) throw new Error('Failed to fetch articles');
             const data = await res.json();
-            setArticles(data);
-            return data;
+            
+            // APIレスポンスをArticleクラスインスタンスに変換
+            const articleInstances = Article.fromApiResponseArray(data);
+            setArticles(articleInstances);
+            return articleInstances;
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
@@ -59,17 +65,23 @@ export const useArticle = () => {
         fetchData();
     }, []);
 
-    const createArticle = async(data:Omit<Article, "updatedAt" | "createdAt" | "uid">) => {
+    const createArticle = async(articleData: Partial<Article>) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
                 throw new Error('No authentication token found');
             }
 
-            const formData = new FormData();
-            formData.append('title', data.title);
-            formData.append('body', data.body);
-            formData.append('thumnailPath', data.thumnailPath);
+            // Articleインスタンスを作成してバリデーション
+            const article = new Article(articleData);
+            const validation = article.validate();
+            
+            if (!validation.isValid) {
+                throw new Error(validation.errors.join(', '));
+            }
+
+            // FormDataに変換して送信
+            const formData = article.toFormData();
             
             const res = await fetch(`http://localhost:4000/admin/create`, {
                 method: 'POST',
@@ -87,13 +99,14 @@ export const useArticle = () => {
         }
     }
 
-    const selectArticle = async(uid:string) => {
+    const selectArticle = async(uid: string): Promise<Article> => {
         try {
-            // no-cache: サーバーに検証してからキャッシュを使用
             const res = await fetch(`http://localhost:4000/admin/article/${uid}`);
             if (!res.ok) throw new Error('Failed to select article');
             const data = await res.json();
-            return data;
+            
+            // APIレスポンスをArticleクラスインスタンスに変換
+            return Article.fromApiResponse(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;

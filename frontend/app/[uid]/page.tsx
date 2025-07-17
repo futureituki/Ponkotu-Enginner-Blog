@@ -103,21 +103,16 @@ const ArticleDetail = ({ params }: { params: Promise<{ uid: string }> }) => {
             <h1 className={styles.title}>{article.title}</h1>
             <div className={styles.meta}>
               <time className={styles.date}>
-                {new Date(article.createdAt).toLocaleDateString('ja-JP', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
+                {article.getFormattedCreatedAt()}
               </time>
-              {article.updatedAt !== article.createdAt && (
+              {article.isUpdated() && (
                 <span className={styles.updated}>
-                  (更新: {new Date(article.updatedAt).toLocaleDateString('ja-JP', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })})
+                  (更新: {article.getFormattedUpdatedAt()})
                 </span>
               )}
+              <span className={styles.readingTime}>
+                読了時間: 約{article.getEstimatedReadingTime()}分
+              </span>
             </div>
           </header>
           
