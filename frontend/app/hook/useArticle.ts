@@ -1,62 +1,84 @@
-import { useState, useEffect } from "react"
-import { Article } from "@/app/type/index"
+import { useState, useEffect } from 'react'
+import { Article } from '../models/Article'
+
+interface CreateArticleData {
+  title: string;
+  body: string;
+  thumnailPath?: string;
+}
 
 export const useArticle = () => {
-    const [articles, setArticles] = useState<Article[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [articles, setArticles] = useState<Article[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
-    const readArticle = async (): Promise<Article[]> => {
+    // 記事取得処理（初期化時のリスト）
+    const readArticle = async () => {
+        setLoading(true);
+        setError(null);
+        
         try {
-            // force-cache: 記事一覧はキャッシュを優先（パフォーマンス重視）
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
             const res = await fetch(`http://localhost:4000/admin/read`, {
-                cache: 'no-store'
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                cache: 'no-store' // 管理画面では常に最新データを取得
             });
-            if (!res.ok) throw new Error('Failed to fetch articles');
+
+            if (!res.ok) {
+                throw new Error(`HTTP Error: ${res.status}`);
+            }
+
             const data = await res.json();
             
-            // APIレスポンスをArticleクラスインスタンスに変換
+            // Article classのインスタンスに変換
             const articleInstances = Article.fromApiResponseArray(data);
             setArticles(articleInstances);
-            return articleInstances;
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error');
-            throw err;
-        }
-    }
-
-    // 強制的に最新データを取得する関数（管理画面用）
-    const refreshArticles = async (): Promise<Article[]> => {
-        try {
-            setLoading(true);
-            setError(null);
-            // no-store: 常に最新データを取得（リアルタイム性重視）
-            const res = await fetch(`http://localhost:4000/admin/read`, {
-                cache: 'no-store'
-            });
-            if (!res.ok) throw new Error('Failed to fetch articles');
-            const data = await res.json();
-            
-            // APIレスポンスをArticleクラスインスタンスに変換
-            const articleInstances = Article.fromApiResponseArray(data);
-            setArticles(articleInstances);
-            return articleInstances;
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error');
-            throw err;
+            console.error('記事の取得に失敗:', err);
+            setError(err instanceof Error ? err.message : '記事の取得に失敗しました');
         } finally {
             setLoading(false);
         }
-    }
+    };
+
+    // 公開用記事リスト（初期表示用）
+    const refreshArticles = async () => {
+        try {
+            const res = await fetch(`http://localhost:4000/admin/read`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                cache: 'force-cache' // 公開画面では高速化のためキャッシュを使用
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                const articleInstances = Article.fromApiResponseArray(data);
+                setArticles(articleInstances);
+            }
+        } catch (err) {
+            console.error('記事の更新に失敗:', err);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
-            setError(null);
             try {
-                await readArticle();
+                setLoading(true);
+                setError(null);
+                await refreshArticles();
             } catch (err) {
-                console.error('Failed to fetch articles:', err);
+                console.error('初期データの取得に失敗:', err);
+                setError('データの取得に失敗しました');
             } finally {
                 setLoading(false);
             }
@@ -65,7 +87,7 @@ export const useArticle = () => {
         fetchData();
     }, []);
 
-    const createArticle = async(articleData: Partial<Article>) => {
+    const createArticle = async(articleData: CreateArticleData) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -86,32 +108,57 @@ export const useArticle = () => {
             const res = await fetch(`http://localhost:4000/admin/create`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`
                 },
                 body: formData
             });
+
+            if (!res.ok) {
+                throw new Error(`HTTP Error: ${res.status}`);
+            }
+
+            const result = await res.json();
+            console.log('記事作成成功:', result);
             
-            if (!res.ok) throw new Error('Failed to create article');
-            await readArticle(); // 記事作成後に一覧を更新
+            // 記事リストを更新
+            await readArticle();
+            
+            return result;
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error');
+            console.error('記事作成エラー:', err);
             throw err;
         }
     }
 
-    const selectArticle = async(uid: string): Promise<Article> => {
+    const selectArticle = async (uid: string): Promise<Article> => {
         try {
-            const res = await fetch(`http://localhost:4000/admin/article/${uid}`);
-            if (!res.ok) throw new Error('Failed to select article');
+            const res = await fetch(`http://localhost:4000//articles/${uid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                cache: 'no-store'
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP Error: ${res.status}`);
+            }
+
             const data = await res.json();
-            
-            // APIレスポンスをArticleクラスインスタンスに変換
             return Article.fromApiResponse(data);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error');
+            console.error('記事の詳細取得に失敗:', err);
             throw err;
         }
-    }
+    };
 
-    return { articles, loading, error, readArticle, refreshArticles, createArticle, selectArticle }
+    return {
+        articles,
+        readArticle,
+        createArticle,
+        selectArticle,
+        refreshArticles,
+        loading,
+        error
+    }
 }

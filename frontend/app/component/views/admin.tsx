@@ -10,10 +10,10 @@ export const AdminPage = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string | undefined>("");
   const [title, setTitle] = useState('')
   const [thumbnail, setThumnail] = useState("")
-  const {articles, readArticle, createArticle, selectArticle, refreshArticles} = useArticle()
+  const {articles, readArticle, createArticle} = useArticle()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleLogin = async () => {
@@ -41,14 +41,14 @@ export const AdminPage = () => {
         setMessage(data.message || '認証に失敗しました。');
         setIsAuthenticated(false);
       }
-    } catch (error) {
-      setMessage('ログインエラーが発生しました。');
+    } catch (err) {
+      setMessage('ログインエラーが発生しました。' + err);
       setIsAuthenticated(false);
     }
   };
 
   // カスタム画像挿入コマンド
-  const imageUploadCommand: any = {
+  const imageUploadCommand = {
     name: 'imageUpload',
     keyCommand: 'imageUpload',
     buttonProps: { 'aria-label': 'Insert Image' },
@@ -73,17 +73,15 @@ export const AdminPage = () => {
         if (res.ok) {
           res.json().then((data) => {
             setMessage(data.message);
-            setIsAuthenticated(true);
+          setIsAuthenticated(true);
           });
         } else {
-          // トークンが無効な場合は削除
           localStorage.removeItem('token');
           localStorage.removeItem('username');
         }
       });
-      readArticle()
     }
-  }, []);
+  }, []); // readArticle()はuseEffect外で一度だけ呼び出すようにしてください（無限ループ防止のため）
 
   const handleThumnailUpload = async(e:React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -99,8 +97,8 @@ export const AdminPage = () => {
     })
       const json = await res.json()
       setThumnail(json.url)
-    } catch (error) {
-      console.error('Upload failed:', error)
+    } catch (err) {
+      console.error('Upload failed:', err)
     }
   }
 
@@ -116,7 +114,7 @@ export const AdminPage = () => {
         method:'POST',
         body:formData
     })
-      const uploadImage = await res.json()
+      await res.json()
       // 記事内に画像を保存
       // setValue((prev) => `${prev}\n\n![image](${imageUrl.url})`)
     } catch (error) {
@@ -128,24 +126,23 @@ export const AdminPage = () => {
     try {
       await createArticle({ 
         title, 
-        body: value, 
+        body: value || "", 
         thumnailPath: thumbnail 
-      });
-      
-      // フォームをリセット
-      setTitle('');
-      setValue('');
-      setThumnail('');
-      setMessage('記事が正常に作成されました');
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : '記事の作成に失敗しました');
+      })
+      setValue("")
+      setTitle("")
+      setThumnail("")
+      alert('記事を作成しました')
+      readArticle()
+    } catch (err) {
+      console.error('Failed to create article:', err)
+      alert('記事の作成に失敗しました')
     }
-  };
+  }
 
   if (isAuthenticated) {
     return (
       <div style={{ padding: 24 }}>
-        <button onClick={refreshArticles}>最新データを取得</button>
         <h2>管理画面</h2>
         <button onClick={handleSubmit}>記事を作成</button>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='タイトルを入力してください' />
@@ -156,7 +153,7 @@ export const AdminPage = () => {
           type="file"
           onChange={handleThumnailUpload}
           accept="image/*"
-        />
+          />
         </div>
         <Image
                             src={thumbnail || '/placeholder.jpg'} 
@@ -165,7 +162,7 @@ export const AdminPage = () => {
                             height={180}
                             unoptimized
                         />
-        <input
+          <input
         type="file"
         ref={fileInputRef}
         onChange={handleUpload}
@@ -216,23 +213,23 @@ export const AdminPage = () => {
   return (
     <div style={{ maxWidth: 400, margin: '80px auto', padding: 20 }}>
       <h2>管理者ログイン</h2>
-      <input
-        type="text"
+        <input
+          type="text"
         placeholder="ユーザー名"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         style={{ width: '100%', padding: 8, marginBottom: 10 }}
-      />
-      <input
+            />
+        <input
         type="password"
         placeholder="パスワード"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         style={{ width: '100%', padding: 8, marginBottom: 10 }}
-      />
+          />
       <button onClick={handleLogin} style={{ padding: 10 }}>
         ログイン
-      </button>
+        </button>
       {message && <p style={{ color: 'red', marginTop: 20 }}>{message}</p>}
     </div>
   );

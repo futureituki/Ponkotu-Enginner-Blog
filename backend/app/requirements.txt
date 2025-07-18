@@ -1,6 +1,9 @@
-flask
-flask-cors
-flask-httpauth
-pymysql
-PyJWT
-cryptography
+flask>=3.0.0
+flask-cors>=4.0.0
+flask-httpauth>=4.8.0
+PyJWT>=2.8.0
+cryptography>=41.0.0
+python-dotenv>=1.0.0
+supabase>=2.3.0
+python-magic>=0.4.27
+requests>=2.31.0

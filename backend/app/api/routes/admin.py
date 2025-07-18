@@ -1,17 +1,17 @@
 from flask import Flask, jsonify, Blueprint, request
 from werkzeug.security import check_password_hash, generate_password_hash
-import pymysql
 import os
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
+from ..service.article import article_service
 
 bp = Blueprint("admin", __name__)
 
 # JWT設定
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'pass')
-ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'user')
-ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'password')
+ADMIN_USERNAME = 'admin'
+ADMIN_PASSWORD = 'password'
 
 users = {
     ADMIN_USERNAME: generate_password_hash(ADMIN_PASSWORD)
@@ -42,10 +42,12 @@ def token_required(f):
 @bp.route('/login', methods=["POST"])
 def login():
     try:
+        print(ADMIN_USERNAME, ADMIN_PASSWORD)
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
         
+        print(username, password)
         if not username or not password:
             return jsonify({'message': 'Username and password are required!'}), 400
         
@@ -76,68 +78,66 @@ def verify_token(current_user):
 
 @bp.route('/create', methods=["POST"])
 @token_required
-def create_articles(current_user):
+def create_article(current_user):
     try:
-        import uuid
-        
-        uid = str(uuid.uuid4())
         title = request.form['title']
         body = request.form['body']
-        thumnailPath = request.form['thumnailPath']
-        
-        connection = pymysql.connect(
-            host=os.environ["DB_HOST"],
-            user=os.environ["DB_USER"],
-            password=os.environ["DB_PASS"],
-            database=os.environ["DB_NAME"],
-            port=3306
-        )
-        with connection.cursor() as cursor:
-             sql = "INSERT INTO articles (uid, title, body, thumnailPath) VALUES (%s, %s, %s, %s)"
-             cursor.execute(sql, (uid, title, body, thumnailPath))
-             connection.commit()
-        return jsonify({"status": "ok", "uid": uid})
+        thumnail_path = request.form['thumnailPath']
+
+        # 入力値の検証
+        if not title or not body:
+            return jsonify({"error": "タイトルと本文は必須です"}), 400
+
+        # 記事を作成
+        article = article_service.create_article(title, body, thumnail_path)
+        return jsonify(article)
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 @bp.route('/read', methods=["GET"])
 def read_articles():
     try:
-        connection = pymysql.connect(
-            host=os.environ["DB_HOST"],
-            user=os.environ["DB_USER"],
-            password=os.environ["DB_PASS"],
-            database=os.environ["DB_NAME"],
-            port=3306,
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        with connection.cursor() as cursor:
-            sql = "SELECT * FROM articles"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-        return jsonify(result)
+        articles = article_service.get_articles()
+        return jsonify(articles)
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 @bp.route('/article/<uid>', methods=["GET"])
 def get_article(uid):
     try:
-        connection = pymysql.connect(
-            host=os.environ["DB_HOST"],
-            user=os.environ["DB_USER"],
-            password=os.environ["DB_PASS"],
-            database=os.environ["DB_NAME"],
-            port=3306,
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        with connection.cursor() as cursor:
-            sql = "SELECT * FROM articles WHERE uid = %s"
-            cursor.execute(sql, (uid,))
-            result = cursor.fetchone()
-        
-        if result:
-            return jsonify(result)
-        else:
-            return jsonify({"status": "error", "message": "Article not found"}), 404
+        article = article_service.get_article(uid)
+        if article:
+            return jsonify(article)
+        return jsonify({"error": "記事が見つかりません"}), 404
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)})
+        return jsonify({"error": str(e)}), 500
+
+@bp.route('/article/<uid>', methods=["PUT"])
+@token_required
+def update_article(current_user, uid):
+    try:
+        title = request.form['title']
+        body = request.form['body']
+        thumnail_path = request.form['thumnailPath']
+
+        # 入力値の検証
+        if not title or not body:
+            return jsonify({"error": "タイトルと本文は必須です"}), 400
+
+        # 記事を更新
+        article = article_service.update_article(uid, title, body, thumnail_path)
+        if article:
+            return jsonify(article)
+        return jsonify({"error": "記事が見つかりません"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@bp.route('/article/<uid>', methods=["DELETE"])
+@token_required
+def delete_article(current_user, uid):
+    try:
+        if article_service.delete_article(uid):
+            return jsonify({"message": "記事を削除しました"})
+        return jsonify({"error": "記事が見つかりません"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

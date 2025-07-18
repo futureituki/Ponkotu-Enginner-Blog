@@ -1,36 +1,19 @@
 version: "3.8"
 
 services:
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-
   backend:
     build: ./backend
     ports:
       - "4000:4000"
     environment:
-      DB_HOST: mysql
-      DB_USER: ${MYSQL_USER}
-      DB_PASS: ${MYSQL_PASSWORD}
-      DB_NAME: ${MYSQL_DATABASE}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       ADMIN_USERNAME: ${ADMIN_USERNAME}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-    depends_on:
-      - mysql
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_KEY: ${SUPABASE_KEY}
     restart: always
     volumes: 
       - ./backend:/app
-      - ./backend/uploads:/app/uploads
   
   frontend:
     build: ./frontend
@@ -44,6 +27,3 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules  # ホスト側のnode_modulesを使わないようにする
-
-volumes:
-  mysql-data:

@@ -1,8 +1,9 @@
-import { ArticleList } from "@/app/component/templates/ArticleList";
-import { TopPage } from "./component/views/top";
+import { TopPage } from './component/views/top'
 
 export default function Home() {
   return (
-    <TopPage />
+    <main>
+      <TopPage />
+    </main>
   )
 }

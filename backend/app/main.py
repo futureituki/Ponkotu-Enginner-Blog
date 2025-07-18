@@ -1,5 +1,10 @@
 from flask import Flask, jsonify
 from api import create_app
+from dotenv import load_dotenv
+import os
+
+# 環境変数の読み込み
+load_dotenv()
 
 app = create_app()
 
