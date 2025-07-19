@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/styles/globals.css";  
 import "@/app/styles/variables.css";
 import Header from "@/app/component/parts/header";
+import { ThemeProvider } from "@/app/component/providers/ThemeProvider";
 
 
 const geistSans = Geist({
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Valorant App",
-  description: "Valorant情報アプリ",
+  title: "Engineer's Blog",
+  description: "Engineer's Blog",
   icons: {
     icon: [
       {
@@ -49,10 +50,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

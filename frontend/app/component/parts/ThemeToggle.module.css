@@ -1,0 +1,68 @@
+.switch {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.switchTrack {
+  width: 60px;
+  height: 32px;
+  background-color: #e5e7eb;
+  border-radius: 16px;
+  position: relative;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.switchThumb {
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  left: 2px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.switch.dark .switchTrack {
+  background-color: #374151;
+}
+
+.switch.dark .switchThumb {
+  transform: translateX(28px);
+  background-color: #1f2937;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  transition: color 0.3s ease;
+}
+
+.switch.dark .icon {
+  color: #fbbf24;
+}
+
+.switch.light .icon {
+  color: #f59e0b;
+}
+
+.switch:hover .switchTrack {
+  background-color: #d1d5db;
+}
+
+.switch.dark:hover .switchTrack {
+  background-color: #4b5563;
+} 

@@ -1,0 +1,219 @@
+
+.container {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.editorWrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaeaea;
+}
+
+/* --- Header --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* --- Main Content --- */
+.main {
+  padding: 1.5rem 2rem 2rem;
+}
+
+/* --- Title Input --- */
+.titleInput {
+  width: 100%;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 700;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+  outline: none;
+}
+
+/* --- Meta Section (Category & Thumbnail) --- */
+.metaSection {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.metaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metaLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.categorySelect {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  min-width: 200px;
+}
+
+.thumbnailUploader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.thumbnailInput {
+  display: none;
+}
+
+.thumbnailLabel {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.thumbnailPreview {
+  border-radius: 6px;
+  border: 1px solid #eaeaea;
+  object-fit: cover;
+}
+
+/* --- Markdown Editor --- */
+.editorContainer {
+  margin-top: 1.5rem;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* --- Buttons --- */
+.button {
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.draftButton {
+  color: #4a5568;
+}
+
+.publishButton {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.publishButton:hover {
+  background-color: #1d4ed8;
+}
+
+/* --- Login Form --- */
+.loginContainer {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.loginContainer h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.loginInput {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #2563eb;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.loginButton:hover {
+  background-color: #1d4ed8;
+}
+
+.errorMessage {
+  color: #e53e3e;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+/* --- Article List (Optional Styling) --- */
+.articleList {
+  max-width: 900px;
+  margin: 2rem auto 0;
+}
+
+.articleCard {
+  padding: 1rem 1.5rem;
+  border: 1px solid #eaeaea;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.articleCard h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.articleMeta {
+  font-size: 0.875rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .header {
+    padding: 1rem;
+  }
+  .main {
+    padding: 1.5rem;
+  }
+  .titleInput {
+    font-size: 1.875rem;
+  }
+  .metaSection {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

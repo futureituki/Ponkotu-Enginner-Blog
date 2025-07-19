@@ -1,20 +1,15 @@
 .header {
-    background-color: #333;
+    /* 青 */
+    background-color: #294174;
 }
 .contents {
     max-width: 90%;
     margin: 0 auto;
     padding: 10px;
 }
-.title {
-    color: #fff;
-}
 .title h1 {
     font-size: var(--text-x-large);
 }
 .title p {
     font-size: var(--text-small);
-}
-.nav {
-    background-color: #fff;
 }

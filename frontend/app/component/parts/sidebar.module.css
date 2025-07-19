@@ -6,11 +6,12 @@
 }
 
 .profileCard {
-    background: white;
     border-radius: 16px;
     padding: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    border:1px solid;
+    border-radius: 16px;
 }
 
 .profileImageWrapper {
@@ -31,14 +32,12 @@
 .profileName {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #333;
     margin: 0 0 1rem;
 }
 
 .profileBio {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #666;
     margin: 0 0 1.5rem;
 }
 
@@ -53,16 +52,10 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    background: #24292e;
-    color: white;
     text-decoration: none;
     border-radius: 8px;
     font-size: 0.95rem;
     transition: background-color 0.2s;
-}
-
-.githubLink:hover {
-    background: #2f363d;
 }
 
 .githubIcon {

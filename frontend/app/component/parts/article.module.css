@@ -1,5 +1,5 @@
 .articleItem {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid;
   transition: background 0.2s;
 }
 
@@ -16,10 +16,6 @@
   transition: background 0.2s;
 }
 
-.articleLink:hover {
-  background: #f3f6fa;
-}
-
 .articleHeader {
   display: flex;
   align-items: center;
@@ -27,7 +23,6 @@
 }
 
 .articleDate {
-  color: #888;
   font-size: 0.95rem;
   margin-right: 12px;
 }
@@ -49,9 +44,10 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border:1px solid;
+  padding: 16px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
-  color: inherit;
   height: 100%;
 }
 
@@ -91,13 +87,10 @@
 
 .cardDate {
   font-size: 0.875rem;
-  color: #fff;
 }
 
 .readingTime {
   font-size: 0.75rem;
-  color: #ccc;
-  background: rgba(255, 255, 255, 0.1);
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-weight: 500;
@@ -108,7 +101,6 @@
   font-weight: 700;
   margin: 0 0 1rem 0;
   line-height: 1.4;
-  color: #fff;
 }
 
 @media (max-width: 1024px) {
