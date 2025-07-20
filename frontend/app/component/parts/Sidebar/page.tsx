@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from './sidebar.module.css';
+import styles from "@/app/component/parts/Sidebar/page.module.css"
 
 export const Sidebar = () => {
     return (

@@ -1,0 +1,29 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorContent {
+  text-align: center;
+}
+
+.errorTitle {
+  font-size: 1.25rem;
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.errorMessage {
+  margin-bottom: 1rem;
+}
+
+.backLink {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.backLink:hover {
+  color: #1d4ed8;
+} 

@@ -1,0 +1,33 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notFound {
+  text-align: center;
+  max-width: 600px;
+  padding: 2rem;
+}
+
+.notFound h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.notFound p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.backLink {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.backLink:hover {
+  color: #1d4ed8;
+} 

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import styles from "@/app/component/parts/article.module.css";
+import styles from "@/app/component/parts/Article/page.module.css"
 import { Article } from "@/app/type/index";
 
 export const ArticleComponent = ({ article }: { article: Article }) => {

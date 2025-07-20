@@ -1,6 +1,6 @@
-import { ArticleComponent } from "@/app/component/parts/article";
+import { ArticleComponent } from "@/app/component/parts/Article/page";
 import { Article } from "@/app/type/index";
-import styles from "@/app/component/templates/article_list.module.css";
+import styles from "@/app/component/templates/ArticleList/page.module.css"
 
 export const ArticleList = ({articles}: {articles: Article[]}) => {
     return (

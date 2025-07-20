@@ -1,6 +1,6 @@
 .header {
     /* 青 */
-    background-color: #294174;
+    background-color: #517fe4;
 }
 .contents {
     max-width: 90%;
@@ -12,4 +12,4 @@
 }
 .title p {
     font-size: var(--text-small);
-}
+} 

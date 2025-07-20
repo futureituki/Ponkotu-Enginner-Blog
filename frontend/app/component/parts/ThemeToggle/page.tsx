@@ -1,10 +1,10 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import css from '@/app/component/parts/ThemeToggle.module.css'
+import styles from "@/app/component/parts/ThemeToggle/page.module.css"
 import { useEffect, useState } from 'react'
 
-export default function ThemeToggle() {
+export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -19,12 +19,12 @@ export default function ThemeToggle() {
   }
   return (
     <button
-      className={`${css.switch} ${theme === 'dark' ? css.dark : css.light}`}
+      className={`${styles.switch} ${theme === 'dark' ? styles.dark : styles.light}`}
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       aria-label="テーマを切り替え"
     >
-      <div className={css.switchTrack}>
-        <div className={css.switchThumb}>
+      <div className={styles.switchTrack}>
+        <div className={styles.switchThumb}>
           {theme === 'dark' ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ export default function ThemeToggle() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className={css.icon}
+              className={styles.icon}
             >
               <path
                 strokeLinecap="round"
@@ -47,7 +47,7 @@ export default function ThemeToggle() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className={css.icon}
+              className={styles.icon}
             >
               <path
                 strokeLinecap="round"

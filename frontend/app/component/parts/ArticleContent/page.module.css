@@ -1,0 +1,398 @@
+.layout {
+    max-width: 700px;
+    width: 80%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.articleContainer {
+    padding: 2rem;
+}
+
+.article {
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    min-width: 0; /* グリッドオーバーフローを防ぐ */
+  }
+  
+  .articleHeader {
+    padding: 2rem 0 3rem 0;
+    border-bottom: 1px solid;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+  }
+  
+  .date {
+    font-weight: 500;
+  }
+  
+  .updated {
+    font-size: 0.85rem;
+  }
+  
+  .readingTime {
+    font-size: 0.85rem;
+    border-radius: 16px;
+    font-weight: 500;
+  }
+  
+  .content {
+    padding: 3rem 0;
+  }
+  .content img {
+    width: 100%;
+    object-fit: cover;
+    margin: 2rem 0;
+  }
+  .content code {
+    max-width: 100%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+  }
+  
+  /* ReactMarkdown のスタイル */
+  .content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem 0;
+    line-height: 1.3;
+    border-bottom: 2px solid;
+    padding-bottom: 0.5rem;
+  }
+  
+  .content h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 1.8rem 0 0.8rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid;
+    line-height: 1.3;
+  }
+  
+  .content h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.6rem 0;
+    line-height: 1.3;
+  }
+  
+  .content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.3rem 0 0.5rem 0;
+    line-height: 1.3;
+  }
+  
+  .content h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.2rem 0 0.4rem 0;
+    line-height: 1.3;
+  }
+  
+  .content h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 1.1rem 0 0.3rem 0;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .content p {
+    margin: 1rem 0;
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+  
+  .content ul,
+  .content ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+    line-height: 1.7;
+  }
+  
+  .content li {
+    margin: 0.5rem 0;
+  }
+  
+  /* preラッパー */
+  .preWrapper {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+  }
+  
+  .blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 1.5rem;
+    margin: 2rem 0;
+    background: #f8f9fa;
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .markdownImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .content a {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+  }
+
+  .content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .content th,
+  .content td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid;
+  }
+  
+  .content th {
+    font-weight: 600;
+  }
+  
+  .content hr {
+    border: none;
+    height: 2px;
+    margin: 3rem 0;
+    border-radius: 1px;
+  }
+  
+  .articleFooter {
+    padding: 2rem 0 3rem 0;
+    border-top: 1px solid;
+  }
+  
+  .backLink {
+    display: inline-flex;
+    align-items: center;
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .backLink:hover {
+    color: #0052a3;
+    text-decoration: underline;
+  }
+  
+  /* ローディング状態 */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-top: 3px solid #0066cc;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .loading p {
+    font-size: 1.1rem;
+  }
+  
+  /* エラー状態 */
+  .error {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error h2 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .error p {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .retryButton {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .retryButton:hover {
+    background: #0052a3;
+  }
+  
+  /* 記事が見つからない状態 */
+  .notFound {
+    text-align: center;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notFound h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .notFound p {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  
+  /* レスポンシブデザイン */
+  @media (max-width: 1024px) {
+    .container {
+      padding: 1.5rem;
+    }
+  
+    .layout {
+      grid-template-columns: 250px 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+  
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  
+    .sidebar {
+      position: relative;
+      top: 0;
+      order: -1; /* 目次を記事の上に表示 */
+    }
+  
+    .articleHeader {
+      padding: 2rem 0 2rem 0;
+    }
+  
+    .title {
+      font-size: 2rem;
+    }
+  
+    .content {
+      padding: 2rem 0;
+    }
+  
+    .content h1 {
+      font-size: 1.6rem;
+    }
+  
+    .content h2 {
+      font-size: 1.4rem;
+    }
+  
+    .content h3 {
+      font-size: 1.2rem;
+    }
+  
+    .content p {
+      font-size: 1rem;
+    }
+  
+    .articleFooter {
+      padding: 1.5rem 0 2rem 0;
+    }
+  
+        .error, .notFound {
+      padding: 2rem;
+    }
+
+    .content table {
+      font-size: 0.9rem;
+    }
+  
+    .content th,
+    .content td {
+      padding: 0.75rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding: 0.5rem;
+    }
+  
+    .articleHeader {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+  
+    .title {
+      font-size: 1.6rem;
+    }
+  
+    .content {
+      padding: 1.5rem;
+    }
+  
+    .articleFooter {
+      padding: 1rem 0 1.5rem 0;
+    }
+  
+    .meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  } 

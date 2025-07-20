@@ -1,4 +1,4 @@
-import { AdminPage } from "../component/views/admin"
+import { AdminPage } from "@/app/component/views/admin"
 
 export default function AdminDashboard() {
     return (

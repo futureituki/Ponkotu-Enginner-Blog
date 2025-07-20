@@ -1,0 +1,17 @@
+/* インラインコードスタイル */
+.inlineCode {
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.inlineCode:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+} 

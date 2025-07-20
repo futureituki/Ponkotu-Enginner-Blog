@@ -1,0 +1,123 @@
+/* コードブロックラッパー */
+.codeBlockWrapper {
+  margin: 2rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* コードヘッダー */
+.codeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.codeLanguage {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* コピーボタン */
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.copyButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.copyButton:active {
+  transform: translateY(0);
+}
+
+.copyIcon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+.copiedText {
+  color: #10b981;
+  font-weight: 600;
+}
+
+/* コードブロック */
+.codeBlock {
+  padding: 1.5rem;
+  margin: 0;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.codeBlock code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-family: inherit;
+  color: inherit;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .codeHeader {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .codeLanguage {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .copyButton {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .copyIcon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .codeBlock {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+} 

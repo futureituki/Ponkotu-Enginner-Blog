@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { TocItem, scrollToHeading } from '@/app/utils/toc';
-import styles from './TableOfContents.module.css';
+import styles from '@/app/component/parts/TableOfContents/page.module.css'
 
 interface TableOfContentsProps {
   items: TocItem[];
